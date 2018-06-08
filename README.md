@@ -1,5 +1,6 @@
 # firefox_update
-This script help you to install an update your firefox on debian GNU linux. em
+
+This script help you to install an update your firefox on debian GNU linux.
 If you have problems updating your firefox on debian this is your script.
 Features:
 1) Automatically detects the system core (32bits or 64bits)
