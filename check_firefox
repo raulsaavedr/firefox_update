@@ -4,7 +4,7 @@
 have_you_sudo=$(sudo -k || echo 'Error')
 clear
 
-echo 'Esta version es 1.1'
+echo 'This is the version 1.0'
 if [ ! -z "$have_you_sudo" ]; then
     echo 'Please give the credentials of superuser for install sudo in your system'
     su - root -c "apt install sudo -y && echo -e '$USER    ALL=(ALL:ALL) ALL' >> /etc/sudoers"
