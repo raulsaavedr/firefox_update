@@ -11,5 +11,5 @@ Features:
 # How to use
 
 For use the script verify you must verify that the name of the file is check_firefox and then
-execute ./check_firefox or source check_firefox or something similar.
+execute ./check_firefox or source check_firefox in bash shell.
 
