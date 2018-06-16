@@ -1,13 +1,13 @@
 #!/bin/bash
 # Distributed by GNU public license
-
+user=$USER
 have_you_sudo=$(sudo -k || echo 'Error')
 clear
 
 echo 'This is the version 1.0'
 if [ ! -z "$have_you_sudo" ]; then
     echo 'Please give the credentials of superuser for install sudo in your system'
-    su - root -c "apt install sudo -y && echo -e '$USER    ALL=(ALL:ALL) ALL' >> /etc/sudoers"
+    su - root -c "apt install sudo -y && echo -e '$user    ALL=(ALL:ALL) ALL' >> /etc/sudoers"
     have_you_sudo=$(sudo || echo '')
     if [ -z "$have_you_sudo" ]; then 
         echo 'Done! now you have sudo in your system!'
@@ -16,9 +16,21 @@ if [ ! -z "$have_you_sudo" ]; then
         exit
     fi
 fi
+have_you_curl=$(curl -V || echo 'Error')
+if [ ! -z "$have_you_curl" ]; then
+    echo 'installing curl in your system'
+    su - root -c "apt install curl -y"
+    have_you_curl=$(curl -V || echo 'Error')
+    if [ -z "$have_you_curl" ]; then 
+        echo 'Done! now you have curl in your system!'
+    else
+        echo 'A problem has ocurred! Please restart the script'
+        exit
+    fi
+fi
 
 if [ ! -d /opt/firefox/releases ]; then
-    sudo mkdir /opt/firefox/releases
+    sudo mkdir -p /opt/firefox/releases
 fi
 
 # This is the default folder to excute again this script
