@@ -21,7 +21,7 @@ fi
 if [ ! -z "$have_you_curl" ]; then
     echo 'installing curl in your system'
     su - root -c "apt install curl -y"
-    have_you_curl=$(curl -V || echo 'Error')
+    have_you_curl=$(curl --silent --output /dev/null example.com || echo 'Error')
     if [ -z "$have_you_curl" ]; then 
         echo 'Done! now you have curl in your system!'
     else
