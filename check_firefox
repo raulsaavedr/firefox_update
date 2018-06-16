@@ -2,7 +2,7 @@
 # Distributed by GNU public license
 user=$USER
 have_you_sudo=$(sudo -k || echo 'Error')
-have_you_curl=$(curl -V || echo 'Error')
+have_you_curl=$(curl --silent --output /dev/null example.com || echo 'Error')
 clear
 
 echo 'This is the version 1.0'
@@ -14,7 +14,7 @@ if [ ! -z "$have_you_sudo" ]; then
         echo 'Done! now you have sudo in your system!'
     else
         echo 'A problem has ocurred! Please restart the script'
-        exit
+        return
     fi
 fi
 
@@ -26,7 +26,7 @@ if [ ! -z "$have_you_curl" ]; then
         echo 'Done! now you have curl in your system!'
     else
         echo 'A problem has ocurred! Please restart the script'
-        exit
+        return
     fi
 fi
 
