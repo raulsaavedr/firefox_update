@@ -2,6 +2,7 @@
 # Distributed by GNU public license
 user=$USER
 have_you_sudo=$(sudo -k || echo 'Error')
+have_you_curl=$(curl -V || echo 'Error')
 clear
 
 echo 'This is the version 1.0'
@@ -16,7 +17,7 @@ if [ ! -z "$have_you_sudo" ]; then
         exit
     fi
 fi
-have_you_curl=$(curl -V || echo 'Error')
+
 if [ ! -z "$have_you_curl" ]; then
     echo 'installing curl in your system'
     su - root -c "apt install curl -y"
@@ -34,11 +35,11 @@ if [ ! -d /opt/firefox/releases ]; then
 fi
 
 # This is the default folder to excute again this script
-if [ ! -f '/usr/bin/check_firefox' ]; then
-    sudo chmod 755 ./check_firefox
-    sudo cp -rf ./check_firefox /usr/bin
-    echo -e 'script copied! Now the script file is in /usr/bin and now you\nCan excute just typing check_firefox in the shell.'
-fi
+# if [ ! -f '/usr/bin/check_firefox' ]; then
+#    sudo chmod 755 ./check_firefox
+#    sudo cp -rf ./check_firefox /usr/bin
+#    echo -e 'script copied! Now the script file is in /usr/bin and now you\nCan excute just typing check_firefox in the shell.'
+#fi
 
 # The system core information (32bits or 64bits)
 system=$(uname -a | awk '{print $9}')
