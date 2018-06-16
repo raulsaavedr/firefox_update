@@ -9,5 +9,5 @@ Features:
 
 # How to use
 
-For use the script execute <code>./check_firefox or source check_firefox</code> in bash shell.
+For use the script execute <code>$./check_firefox</code>or <code>source check_firefox</code> in bash shell.
 
