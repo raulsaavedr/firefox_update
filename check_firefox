@@ -3,6 +3,10 @@
 user=$USER
 have_you_sudo=$(sudo -k || echo 'Error')
 have_you_curl=$(curl --silent --output /dev/null example.com || echo 'Error')
+
+# set language variable below with one of the country code from https://ftp.mozilla.org/pub/firefox/releases/latest/README.txt
+# for example 'langueage=fr' to French Firefox version
+language=en-US
 clear
 
 echo 'Install/Update Firefox script'
@@ -34,6 +38,10 @@ if [ ! -d /opt/firefox/releases ]; then
     sudo mkdir -p /opt/firefox/releases
 fi
 
+if [ ! -d /usr/lib/firefox-esr/ ]; then
+    sudo mkdir -p /usr/lib/firefox-esr
+fi
+
 # The system core information (32bits or 64bits)
 system=$(uname -a | awk '{print $9}')
 #No error at the start
@@ -41,10 +49,10 @@ error_link=1
 
 while [[ ! -z $error_link ]]; do
     if [ $system == 'x86_64' ] || [ $system == 'amd_64' ]; then
-        link_firefox=$(curl -s "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" | awk '{ print $2 }' | cut -f2 -d'"')
+        link_firefox=$(curl -s "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=${language}" | awk '{ print $2 }' | cut -f2 -d'"')
         error_link=$(sudo wget -P /opt/firefox/releases -N $link_firefox || echo '\n\nLink not found! verify your internet conecction!... trying again\n\n');
     else
-        link_firefox=$(curl -s "https://download.mozilla.org/?product=firefox-latest&os=linux&lang=en-US" | awk '{ print $2 }' | cut -f2 -d'"')
+        link_firefox=$(curl -s "https://download.mozilla.org/?product=firefox-latest&os=linux&lang=${language}" | awk '{ print $2 }' | cut -f2 -d'"')
         error_link=$(sudo wget -P /opt/firefox/releases -N $link_firefox || echo '\n\nLink not found! verify your internet conecction!... trying again\n\n');
     fi
     echo -e $error_link
@@ -53,15 +61,15 @@ done
 version=$(echo $link_firefox | cut -f7 -d'/')
 
 # If is an install the flag will be empty if not will be 1 logic
-install_or_update=$(ls /opt/firefox/firefox || echo '')
+install_or_update=$([ -f /opt/firefox/firefox ] && ls /opt/firefox/firefox || echo '')
 
-# If the var is empty do the simbolic link and preserve the original link
+# If the var is empty do the symbolic link and preserve the original link
 if [[ -z $install_or_update ]]; then
-    sudo mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr_orig
-    sudo ln -s /opt/firefox/firefox/firefox /usr/lib/firefox-esr/firefox-esr
+    [ -f /usr/lib/firefox-esr/firefox-esr ] && sudo mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr_orig
+    [ -f /usr/lib/firefox-esr/firefox-esr ] && sudo ln -s /opt/firefox/firefox /usr/lib/firefox-esr/firefox-esr
 fi
 
-echo 'La version de firefox es $version'
+echo "The version of Firefox is $version"
 error_unzip=$(sudo tar -f /opt/firefox/releases/firefox-$version.tar.bz2 --test-label || echo '\n\nERROR: The download has failed!...resuming download\n\n')
 
 while [[ ! -z $error_unzip ]]; do
@@ -70,7 +78,7 @@ while [[ ! -z $error_unzip ]]; do
     error_unzip=$(sudo tar -f /opt/firefox/releases/firefox-$version.tar.bz2 --test-label || echo '\n\nERROR: The download has failed!...resuming download\n\n')
 done
 
-sudo tar xjf /opt/firefox/releases/firefox-$version.tar.bz2 -C /opt/firefox  
+sudo tar xjf /opt/firefox/releases/firefox-$version.tar.bz2 -C /opt
 
 if [[ -z $install_or_update ]]; then
     echo 'Firefox has been installed correctly!';
